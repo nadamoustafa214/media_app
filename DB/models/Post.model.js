@@ -18,13 +18,17 @@ like:[{
     type:Types.ObjectId,
     ref:"user"
 }],
-dislike:[{
+unlike:[{
     type:Types.ObjectId,
     ref:"user"
 }],
 isDeleted:{
     type:Boolean,
     default:false
+},
+total:{
+    type:Number,
+    default:0
 }
 
 },{

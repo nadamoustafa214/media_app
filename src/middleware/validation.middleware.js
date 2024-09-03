@@ -6,12 +6,13 @@ const validationObjectID=(value,helper)=>{
 return Types.ObjectId.isValid(value)? true : helper.message('in-valid objectID')
 }
 export const fields={
-    id:joi.string().custom(validationObjectID).required(),
+    id:joi.string().custom(validationObjectID),
     email:joi.string().email({minDomainSegments:2,tlds:{allow:['com']}}).required(),
     password:joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
     cpassword:joi.string().valid(joi.ref("password")).required(),
     userName:joi.string().alphanum().required(),
-    file:joi.object({
+    file:joi.object(
+        {
         size:joi.number().positive().required(),
         path:joi.string().required(),
         filename:joi.string().required(),
@@ -19,8 +20,10 @@ export const fields={
         mimetype:joi.string().required(),
         encoding:joi.string().required(),
         originalname:joi.string().required(),
+        fieldname:joi.string().required(),
         dest:joi.string()
-    })
+    }
+)
 
 }
 export const validation=(schema)=>{

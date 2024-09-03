@@ -5,7 +5,30 @@ export const newPostSchema={
     body:Joi.object({
         title:Joi.string().min(1).required(),
         caption:Joi.string(),
-        userId:fields.id.required()
+        userId:fields.id
     }),
     file:fields.file
+}
+
+export const updatedPostSchema={
+    body:Joi.object({
+        title:Joi.string().min(1).required(),
+        caption:Joi.string()
+    }).required(),
+    file:fields.file,
+    params:Joi.object({
+        id:fields.id
+    }).required()
+}
+
+export const deletePostSchema={
+    params:Joi.object({
+        id:fields.id
+    }).required()
+}
+
+export const likeOrUnlikePostSchema={
+    params:Joi.object({
+        id:fields.id
+    }).required()
 }

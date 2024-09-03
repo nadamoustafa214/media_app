@@ -9,7 +9,7 @@ const router=Router()
 router.get("/profile",auth,UC.profile)
 router.patch('/change-password',validation(validators.updatePasswordSchema),auth,UC.updatePassword)
 router.get('/:id/profile',validation(validators.shareProfileSchema),UC.shareProfile)
-router.put('/updateProfile',auth,fileUpload('',fileValidation.image).fields([
+router.put('/updateProfile',auth,fileUpload(fileValidation.image).fields([
     { name: 'profilePicture', maxCount: 1 },
     { name: 'coverPicture', maxCount: 3 }
 ]),UC.updateUser)
