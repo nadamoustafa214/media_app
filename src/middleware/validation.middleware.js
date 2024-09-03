@@ -1,11 +1,26 @@
 import joi from "joi"
-const dataMethods=['body','params','query']
+import { Types } from "mongoose"
+const dataMethods=['body','params','query','headers','file']
+// for check if objectid is valid
+const validationObjectID=(value,helper)=>{
+return Types.ObjectId.isValid(value)? true : helper.message('in-valid objectID')
+}
 export const fields={
-    id:joi.string().min(24).max(24).required(),
+    id:joi.string().custom(validationObjectID).required(),
     email:joi.string().email({minDomainSegments:2,tlds:{allow:['com']}}).required(),
     password:joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
     cpassword:joi.string().valid(joi.ref("password")).required(),
     userName:joi.string().alphanum().required(),
+    file:joi.object({
+        size:joi.number().positive().required(),
+        path:joi.string().required(),
+        filename:joi.string().required(),
+        destination:joi.string().required(),
+        mimetype:joi.string().required(),
+        encoding:joi.string().required(),
+        originalname:joi.string().required(),
+        dest:joi.string()
+    })
 
 }
 export const validation=(schema)=>{

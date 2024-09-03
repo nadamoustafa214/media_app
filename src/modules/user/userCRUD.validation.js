@@ -13,3 +13,7 @@ export const shareProfileSchema={
         id:fields.id
     }).required()
 }
+
+export const profilePicSchema={
+    file:fields.file.required()
+}
