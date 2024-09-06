@@ -49,6 +49,10 @@ const comment =await commentModel.findByIdAndUpdate({_id:commentId,userId:req.us
 
 export const deleteComment=async(req,res,next)=>{
     const comment=await commentModel.findByIdAndUpdate({_id:req.params.commentId,userId:req.user._id,postId:req.params.postId},{isDeleted:true}) 
+   if(comment.image!=null){
+    await cloudinary.uploader.destroy(comment.image.public_id,comment.image.secure_url)
+   }
+   
     if(!comment){
         return next(new Error('comment not found',{cause:400}))
     }
