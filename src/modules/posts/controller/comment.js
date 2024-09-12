@@ -14,7 +14,7 @@ export const createComment=async(req,res,next)=>{
     }
     let image={}
     if(req.file){
-        const {secure_url,public_id}=await cloudinary.uploader.upload(req.file.path,{folder:`user/${req.params.id}/comment/${comment._id}`})
+        const {secure_url,public_id}=await cloudinary.uploader.upload(req.file.path,{folder:`user/${req.params.id}/comment`})
         image={secure_url,public_id}
     }
     const comment=await commentModel.create({userId:user._id,postId:req.params.id,text:req.body.text,image})
@@ -36,7 +36,7 @@ const user= await userModel.findById(req.user._id)
     }
 let image={}
     if(req.file){
-        const {secure_url,public_id}=await cloudinary.uploader.upload(req.file.path,{folder:`user/${req.params.id}/comment/${comment._id}`})
+        const {secure_url,public_id}=await cloudinary.uploader.upload(req.file.path,{folder:`user/${req.params.id}/comment`})
         image={secure_url,public_id}
     }
 const comment =await commentModel.findByIdAndUpdate({_id:commentId,userId:req.user._id,postId:req.params.id},{text:req.body.text,image},{new:true})
@@ -46,14 +46,33 @@ const comment =await commentModel.findByIdAndUpdate({_id:commentId,userId:req.us
      return res.status(200).json({message:"updated",comment})
 
 }
+// fyha a777a
 
 export const deleteComment=async(req,res,next)=>{
-    const comment=await commentModel.findByIdAndUpdate({_id:req.params.commentId,userId:req.user._id,postId:req.params.postId},{isDeleted:true}) 
-   if(comment.image!=null){
-    await cloudinary.uploader.destroy(comment.image.public_id,comment.image.secure_url)
-   }
-   
-    if(!comment){
+
+
+    const comment1=await commentModel.findById({_id:req.params.commentId})
+    // const comment=await commentModel.findByIdAndUpdate({_id:req.params.commentId},{isDeleted:true}) 
+    console.log(comment1.userId);
+    // console.log(req.user._id!=comment.userId);
+
+    const user=await userModel.findById(req.user._id)
+    // console.log(parseInt(user._id));
+
+    if(JSON.stringify(user._id)!=JSON.stringify(comment1.userId)){
+        return next(new Error(`invalid user `,{cause:400}))
+    }
+
+    // if(req.user._id!=comment.userId){
+    //     return next(new Error(`invalid user `,{cause:400}))
+    // }
+    if(req.params.postId!=comment1.postId){
+        return next(new Error(`invalid post `,{cause:400}))
+    }
+//    if(comment1.image!=null){
+//     await cloudinary.uploader.destroy(comment.image.public_id,comment.image.secure_url)
+//    }
+    if(!comment1){
         return next(new Error('comment not found',{cause:400}))
     }
     return res.status(200).json({message:"deleted"})

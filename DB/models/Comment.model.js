@@ -1,4 +1,4 @@
-import { object } from "joi";
+
 import { Schema,Types,model } from "mongoose";
 
 const commentSchema=new Schema({
@@ -7,7 +7,7 @@ const commentSchema=new Schema({
         required:true
     },
     image:{
-        type:object
+        type:Object
     },
     userId:{
         type:Types.ObjectId,
