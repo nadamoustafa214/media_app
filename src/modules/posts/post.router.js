@@ -12,16 +12,18 @@ const router=Router()
 router.post('/newPost',auth,fileUpload(fileValidation.image).single('image'),validation(validators.newPostSchema),asyncHandler(PC.newPost))
 router.patch('/like/:id',auth,validation(validators.likeOrUnlikePostSchema),asyncHandler(PC.likePost))
 router.patch('/unlike/:id',auth,validation(validators.likeOrUnlikePostSchema),asyncHandler(PC.unlikePost))
-router.put('/editPost/:id',auth,validation(validators.updatedPostSchema),fileUpload(fileValidation.image).single('image'),PC.updatePost)
-router.post('/delete/:id',auth,validation(validators.deletePostSchema),PC.deletePost)
+router.put('/editPost/:id',auth,validation(validators.updatedPostSchema),fileUpload(fileValidation.image).single('image'),asyncHandler(PC.updatePost))
+router.post('/delete/:id',auth,validation(validators.deletePostSchema),asyncHandler(PC.deletePost))
+router.get('/getPosts',auth,asyncHandler(PC.getPosts))
 
 // =================comment===================
 
-router.post('/comment/:id',auth,fileUpload(fileValidation.image).single('image'),validation(validators.createCommentSchema),CC.createComment)
-router.patch('/editComment/:id',auth,fileUpload(fileValidation.image).single('image'),validation(validators.updatedCommentSchema),CC.updateComment)
-router.post('/:postId/deleteComment/:commentId',auth,validation(validators.deleteCommentSchema),CC.deleteComment)
-router.patch('/:postId/likeComment/:commentId',auth,validation(validators.likeOrUnlikePostSchema),CC.likeComment)
-router.patch('/:postId/unlikeComment/:commentId',auth,validation(validators.likeOrUnlikePostSchema),CC.unlikeComment)
+router.post('/comment/:id',auth,fileUpload(fileValidation.image).single('image'),validation(validators.createCommentSchema),asyncHandler(CC.createComment))
+router.post('/:postId/updateComment/:commentId',auth,fileUpload(fileValidation.image).single('image'),validation(validators.updatedCommentSchema),asyncHandler(CC.updateComment))
+router.post('/:postId/deleteComment/:commentId',auth,validation(validators.deleteCommentSchema),asyncHandler(CC.deleteComment))
+router.patch('/:postId/likeComment/:commentId',auth,validation(validators.likeOrUnlikePostSchema),asyncHandler(CC.likeComment))
+router.patch('/:postId/unlikeComment/:commentId',auth,validation(validators.likeOrUnlikePostSchema),asyncHandler(CC.unlikeComment))
+router.post('/:postId/comments',auth,asyncHandler(CC.getAllComments))
 
 
 

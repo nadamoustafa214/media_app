@@ -82,3 +82,12 @@ export const updatePost=async(req,res,next)=>{
     }
     return res.status(200).json({message:"updated",post})
 }
+
+export const getPosts=async(req,res,next)=>{
+    const user=await userModel.findById(req.user._id)
+    if(!user){
+        return next (new Error('user not found',{cause:400}))
+    }
+    const posts=await postModel.find({userId:user._id},{isDeleted:false})
+    return res.status(200).json({message:"done",posts})
+}

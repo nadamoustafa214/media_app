@@ -29,9 +29,9 @@ export const deletePostSchema={
 
 export const likeOrUnlikePostSchema={
     params:Joi.object({
-        id:fields.id,
-        commentId:fields.id,
-        postId:fields.id
+        // id:fields.id,
+        commentId:fields.id.required(),
+        postId:fields.id.required()
     }).required()
 }
 
@@ -45,7 +45,8 @@ export const createCommentSchema={
 export const updatedCommentSchema={
     file:fields.file,
     params:Joi.object({
-        id:fields.id.required()
+        commentId:fields.id.required(),
+        postId:fields.id.required(),
     }).required()
 }
 
